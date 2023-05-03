@@ -2,7 +2,7 @@ from telebot import TeleBot
 from telebot.types import *
 import sqlite3
 
-
+#
 class Admin_params:
     default_pass = 1111
     about = None
