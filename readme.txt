@@ -1,5 +1,7 @@
-v1.1
+v1.2
 Hello my dear user, I am Ah. This is  main moments, which may raise questions about my bot:
+
+Important! Corrected hole in security system!
 
 list libraries:
 pysqlite3-0.5.0
