@@ -6,6 +6,11 @@ import sqlite3
 
 bot = TeleBot(token)
 
+global mes, username, user_id
+global new_passwd
+mes = username = user_id = None
+new_passwd = '0000'
+
 class Keyboard:
     @staticmethod
     def welcome_keyboard():
@@ -106,11 +111,14 @@ def insert_message(message: Message):
 
 @bot.message_handler(commands=["send"])
 def post(message: Message):
-    bot.send_message(message.from_user.id, "Спасибо за сообщение)\nНажмите /go_main дял перехода в главное меню", reply_markup=Keyboard.main_menu())
-    with closing(sqlite3.connect(database)) as con:
-        with closing(con.cursor()) as tab:
-            tab.execute("INSERT INTO user_message VALUES (?,?,?)", (user_id, username, mes))    
-            con.commit()
+    if mes == "/send" or mes == "/go_main" or mes == None:
+        bot.send_message(message.from_user.id, "Спам и ложные сообщения не записываются в базу.")
+    else:
+        bot.send_message(message.from_user.id, "Спасибо за сообщение)\nНажмите /go_main дял перехода в главное меню", reply_markup=Keyboard.main_menu())
+        with closing(sqlite3.connect(database)) as con:
+            with closing(con.cursor()) as tab:
+                tab.execute("INSERT INTO user_message VALUES (?,?,?)", (user_id, username, mes))    
+                con.commit()
 
 
 
@@ -188,7 +196,7 @@ def passwd_new(message : Message):
 def pass_yes(message: Message):
     exam_admin(message.from_user.id)
     if passwd == admin_passwd:
-        bot.send_message(message.from_user.id, text = "Password was update\nClick '/back' to go to settings\nClick '/go_main' to go to main menu", reply_markup=Keyboard.after_passwd_keyboard())
+        bot.send_message(message.from_user.id, text = f"Password was update, password = {new_passwd}\nClick '/back' to go to settings\nClick '/go_main' to go to main menu", reply_markup=Keyboard.after_passwd_keyboard())
         with closing(sqlite3.connect(database)) as con:
             with closing(con.cursor()) as tab:
                 tab.execute(f"UPDATE bot_params SET real_password = ('{new_passwd}')")
