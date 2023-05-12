@@ -111,10 +111,10 @@ def insert_message(message: Message):
 
 @bot.message_handler(commands=["send"])
 def post(message: Message):
-    if mes == "/send" or mes == "/go_main" or mes == None:
+    if mes.startswith('/') or mes == None:
         bot.send_message(message.from_user.id, "Спам и ложные сообщения не записываются в базу.")
     else:
-        bot.send_message(message.from_user.id, "Спасибо за сообщение)\nНажмите /go_main дял перехода в главное меню", reply_markup=Keyboard.main_menu())
+        bot.send_message(message.from_user.id, "Спасибо за сообщение)\nНажмите /go_main для перехода в главное меню", reply_markup=Keyboard.main_menu())
         with closing(sqlite3.connect(database)) as con:
             with closing(con.cursor()) as tab:
                 tab.execute("INSERT INTO user_message VALUES (?,?,?)", (user_id, username, mes))    
@@ -225,7 +225,9 @@ def read_messages(message: Message):
                         bot.send_message(message.from_user.id, ' '.join(map(str, tab.execute("SELECT id, username, message FROM user_message").fetchall().pop(count))))
                         count +=1
                     except:
-                        break  
+                        if count == 0:
+                            bot.send_message(message.from_user.id, "No messages.")
+                        break                        
     else:
         bot.send_message(message.from_user.id, "sorry, you are not the admin.", reply_markup=Keyboard.main_menu())
 
