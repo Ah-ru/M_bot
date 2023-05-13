@@ -113,7 +113,7 @@ def insert_message(message: Message):
 @bot.message_handler(commands=["send"])
 def post(message: Message):
     if mes.startswith('/') or mes == None:
-        bot.send_message(message.from_user.id, "Спам и ложные сообщения не записываются в базу.", reply_markup = Keyboard.main_menu)
+        bot.send_message(message.from_user.id, "Спам и ложные сообщения не записываются в базу.", reply_markup = Keyboard.main_menu())
     else:
         bot.send_message(message.from_user.id, "Спасибо за сообщение)\nНажмите /go_main для перехода в главное меню", reply_markup = Keyboard.main_menu())
         with closing(sqlite3.connect(database)) as con:
