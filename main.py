@@ -3,12 +3,11 @@ from telebot.types import *
 from contextlib import closing
 from config import *
 import sqlite3
+import datetime
 
 bot = TeleBot(token)
 
-global mes, username, user_id
 global new_passwd
-mes = username = user_id = None
 new_passwd = '0000'
 
 class Keyboard:
@@ -79,6 +78,10 @@ class Keyboard:
         button2 = KeyboardButton("/go_main")
         return Keyboard.add(button1, button2)
 
+def clear():
+    global mes, username, user_id, time
+    mes = username = user_id = time = None
+clear()
 
 def exam_admin(admin_id):
     with closing(sqlite3.connect(database)) as con:
@@ -104,23 +107,24 @@ def write(message: Message):
 
     
 def insert_message(message: Message):
-    global mes, username, user_id
+    global mes, username, user_id, time
     mes = message.text
     username = message.from_user.username
     user_id  = message.from_user.id
+    time = message.date
 
 
 @bot.message_handler(commands=["send"])
 def post(message: Message):
-    if mes.startswith('/') or mes == None:
+    if mes == None or mes.startswith('/'):
         bot.send_message(message.from_user.id, "Спам и ложные сообщения не записываются в базу.", reply_markup = Keyboard.main_menu())
     else:
         bot.send_message(message.from_user.id, "Спасибо за сообщение)\nНажмите /go_main для перехода в главное меню", reply_markup = Keyboard.main_menu())
         with closing(sqlite3.connect(database)) as con:
             with closing(con.cursor()) as tab:
-                tab.execute("INSERT INTO user_message VALUES (?,?,?)", (user_id, username, mes))    
+                tab.execute("INSERT INTO user_message VALUES (?,?,?,?)", (user_id, username, mes, time))    
                 con.commit()
-
+        clear()
 
 
 
@@ -224,7 +228,14 @@ def read_messages(message: Message):
                 count = 0
                 while True:
                     try:
-                        bot.send_message(message.from_user.id, ' '.join(map(str, tab.execute("SELECT id, username, message FROM user_message").fetchall().pop(count))))
+                        us_id = ' '.join(map(str, tab.execute("SELECT id FROM user_message").fetchall().pop(count)))
+                        username = ' '.join(map(str, tab.execute("SELECT username FROM user_message").fetchall().pop(count)))
+                        date = ' '.join(map(str, tab.execute("SELECT time FROM user_message").fetchall().pop(count)))
+                        text = ' '.join(map(str, tab.execute("SELECT message FROM user_message").fetchall().pop(count)))
+                        offset = datetime.timedelta(hours=3)
+                        tz = datetime.timezone(offset, name='МСК')
+                        local_time = datetime.datetime.fromtimestamp(int(date) , tz=tz).strftime('%Y-%m-%d\nTime: %H:%M:%S') 
+                        bot.send_message(message.from_user.id, text = f"№ {count}\nDate: {local_time}\nUsername: {username}\nid: {us_id}\nText:\n{text}")
                         count +=1
                     except:
                         if count == 0:
