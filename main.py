@@ -234,7 +234,7 @@ def read_messages(message: Message):
                         text = ' '.join(map(str, tab.execute("SELECT message FROM user_message").fetchall().pop(count)))
                         offset = datetime.timedelta(hours=3)
                         tz = datetime.timezone(offset, name='МСК')
-                        local_time = datetime.datetime.fromtimestamp(int(date) , tz=tz).strftime('%Y-%m-%d\nTime: %H:%M:%S') 
+                        local_time = datetime.datetime.fromtimestamp(int(date) , tz=tz).strftime('%d-%m-%Y\nTime: %H:%M:%S') 
                         bot.send_message(message.from_user.id, text = f"№ {count}\nDate: {local_time}\nUsername: {username}\nid: {us_id}\nText:\n{text}")
                         count +=1
                     except:
