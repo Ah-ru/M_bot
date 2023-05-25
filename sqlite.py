@@ -1,6 +1,18 @@
 import sqlite3
 from contextlib import closing
 from config import database
+
+with closing(sqlite3.connect(database)) as con:
+    with closing(con.cursor()) as tab:
+        try:
+            tab.execute("CREATE TABLE admin (id INTEGER, password TEXT)")
+            tab.execute("CREATE TABLE bot_params(real_password TEXT, about TEXT, root TEXT)")
+            tab.execute("CREATE TABLE user_message (id INTEGER, username TEXT, message TEXT, time INTEGER)")
+            tab.execute("INSERT INTO bot_params VALUES (?,?,?)",('0000', '', ''))
+            con.commit()
+        except sqlite3.OperationalError:
+            pass
+
 class SQL_Enter:
     def exam_admin(admin_id):
         with closing(sqlite3.connect(database)) as con:
