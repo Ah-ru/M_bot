@@ -1,11 +1,11 @@
 from telebot import TeleBot
 from telebot.types import *
-from config import group_id, token, NEW_PASSWD
+from config import group_id, token
 from Keyboards import Keyboard
 from sqlite import SQL_Enter
 
 bot = TeleBot(token)
-sd = {"count":0}
+sd = {"count":0,"pass":"0000"}
 
 @bot.message_handler(commands=["start", "help", "go_main"])
 def welcome(message: Message):
@@ -61,6 +61,10 @@ def read_messages(message: Message):
     else:
         bot.send_message(message.chat.id, "sorry, you are not the admin.", reply_markup = Keyboard.main_menu())
 
+@bot.callback_query_handler(func=lambda call: call.data == "apass")
+def passwd_button(call: CallbackQuery): #ok
+    bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.id)
+    ans = bot.send_message(chat_id=call.message.chat.id, text= f"Admin password = {SQL_Enter.passwd_button()}\nClick '/back' to go to settings\nClick '/go_main' to go to main menu", reply_markup = Keyboard.after_passwd_keyboard()) 
 
 @bot.callback_query_handler(func=lambda call: call.data == "passwd")
 def passwd_button(call: CallbackQuery): #ok
@@ -71,17 +75,18 @@ def passwd_button(call: CallbackQuery): #ok
 
 def passwd_new(message : Message):
     bot.send_message(message.chat.id, text=f"New password = {message.text}\nConfirm password\nClick Yes or No", reply_markup = Keyboard.confirm_keyboard())
-    global NEW_PASSWD
-    NEW_PASSWD= message.text
+    sd["pass"] = message.text
+
 
 @bot.message_handler(commands=["Yes"])#OK
 def pass_yes(message: Message):
     if SQL_Enter.exam_admin(message.chat.id):
-        bot.send_message(message.chat.id, text = f"Password was update, password = {NEW_PASSWD}\nClick '/back' to go to settings\nClick '/go_main' to go to main menu", reply_markup = Keyboard.after_passwd_keyboard())
-        SQL_Enter.pass_yes(NEW_PASSWD)
+        bot.send_message(message.chat.id, text = f"Password was update, password = {sd['pass']}\nClick '/back' to go to settings\nClick '/go_main' to go to main menu", reply_markup = Keyboard.after_passwd_keyboard())
+        SQL_Enter.pass_yes(sd["pass"])
     else:
         bot.send_message(message.chat.id, "sorry, you are not the admin.", reply_markup = Keyboard.main_menu())
     
+
 @bot.message_handler(commands=["No"])
 def pass_no(message: Message):
     if SQL_Enter.exam_admin(message.chat.id):

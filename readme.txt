@@ -10,6 +10,7 @@ pyTelegramBotAPI-4.11.0
 
 First: defalt admin password = 0000(Then you can enter new admin password)
 Second: Necessary files.
-Necessary files: main.py, telegram.db, config.py, sqlite.py, Keyboards.py(You can find this files in the github repository)
+Necessary files: main.py, config.py, sqlite.py, Keyboards.py(You can find this files in the github repository)
+*Database can create itself.
 All, if will questions write me on email.
 GoodBye.

@@ -38,8 +38,10 @@ class Keyboard:
 
     @staticmethod
     def new_pass_settings_keyboard():
-        keyboard = InlineKeyboardMarkup(row_width=2)
-        return keyboard.add(InlineKeyboardButton(text="Set new password",callback_data = "passwd"))
+        keyboard = InlineKeyboardMarkup(row_width = 1)
+        button1 = InlineKeyboardButton(text="Set new password",callback_data = "passwd")
+        button2 = InlineKeyboardButton(text="Checked",callback_data = "apass")
+        return keyboard.add(button1, button2)
     
     @staticmethod
     def after_passwd_keyboard():
