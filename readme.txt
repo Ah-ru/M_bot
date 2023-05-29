@@ -1,4 +1,4 @@
-v1.3x
+v1.5x
 Hello my dear user, I am Ah. This is  main moments, which may raise questions about my bot:
 
 Important! Corrected hole in security system!

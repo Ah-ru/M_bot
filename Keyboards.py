@@ -59,3 +59,17 @@ class Keyboard:
         button1 = KeyboardButton("/all_commands")
         button2 = KeyboardButton("/go_main")
         return Keyboard.add(button1, button2)
+    
+    @staticmethod
+    def bn():
+        keyboard = InlineKeyboardMarkup(row_width=2)
+        button1 = InlineKeyboardButton(text="back",callback_data = f"pre")
+        button2 = InlineKeyboardButton(text="next",callback_data = f"next")
+        return keyboard.add(button1, button2)
+
+    @staticmethod
+    def sd(count):
+        keyboard = InlineKeyboardMarkup(row_width=2)
+        button1 = InlineKeyboardButton(text="send",callback_data = f"add{count}")
+        button2 = InlineKeyboardButton(text="del",callback_data = f"del{count}")
+        return keyboard.add(button1, button2)

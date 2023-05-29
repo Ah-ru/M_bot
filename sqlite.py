@@ -1,4 +1,5 @@
 import sqlite3
+import datetime
 from contextlib import closing
 from config import database
 
@@ -30,11 +31,15 @@ class SQL_Enter:
     def read_messages(count):
         with closing(sqlite3.connect(database)) as con:
             with closing(con.cursor()) as tab:
+                range_tab = int(' '.join(map(str, tab.execute("SELECT COUNT(*) FROM user_message").fetchall().pop(0))))
                 us_id = ' '.join(map(str, tab.execute("SELECT id FROM user_message").fetchall().pop(count)))
                 username = ' '.join(map(str, tab.execute("SELECT username FROM user_message").fetchall().pop(count)))
                 date = ' '.join(map(str, tab.execute("SELECT time FROM user_message").fetchall().pop(count)))
-                text = ' '.join(map(str, tab.execute("SELECT message FROM user_message").fetchall().pop(count)))
-                return us_id, username, date, text
+                text = ' '.join(map(str, tab.execute("SELECT message FROM user_message").fetchall().pop(count))) 
+                offset = datetime.timedelta(hours=3)
+                tz = datetime.timezone(offset, name='МСК')
+                local_time = datetime.datetime.fromtimestamp(int(date) , tz=tz).strftime('%d-%m-%Y\nTime: %H:%M:%S')
+                return us_id, username, local_time, text, range_tab, text
 
     def post(id, username, text, date):
         with closing(sqlite3.connect(database)) as con:
@@ -69,4 +74,19 @@ class SQL_Enter:
         with closing(sqlite3.connect(database)) as con:
             with closing(con.cursor()) as tab:
                 tab.execute("DELETE FROM user_message")
+                con.commit()
+    def send_to_chanel(count):
+        with closing(sqlite3.connect(database)) as con:
+            with closing(con.cursor()) as tab:        
+                text = ' '.join(map(str, tab.execute("SELECT message FROM user_message").fetchall().pop(count)))
+                us_id = ' '.join(map(str, tab.execute("SELECT id FROM user_message").fetchall().pop(count)))
+                tab.execute("DELETE FROM user_message WHERE id = ?",(us_id,))
+                con.commit()
+                return text
+            
+    def delete_message(n):
+        with closing(sqlite3.connect(database)) as con:
+            with closing(con.cursor()) as tab:
+                us_id = ' '.join(map(str, tab.execute("SELECT id FROM user_message").fetchall().pop(int(n))))
+                tab.execute("DELETE FROM user_message WHERE id = ?",(us_id,))
                 con.commit()
