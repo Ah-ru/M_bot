@@ -149,7 +149,7 @@ def send_gr(call: CallbackQuery):
     bot.register_next_step_handler_by_chat_id(call.message.chat.id, callback = send_in_group)
 
 
-def send_in_group(message: Message):
+def send_in_group(message: Message):#
     count = sd["adc"]
     bot.send_message(chat_id = group_id, text = f"Вопрос:\n{SQL_Enter.send_to_chanel(count)}\n________\nОтвет эксперта:\n{message.text}")
     bot.delete_message(message.chat.id, message.id)
