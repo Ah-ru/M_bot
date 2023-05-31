@@ -71,7 +71,8 @@ class Keyboard:
 
     @staticmethod
     def sd(count):
-        keyboard = InlineKeyboardMarkup(row_width=2)
+        keyboard = InlineKeyboardMarkup(row_width=3)
         button1 = InlineKeyboardButton(text="send",callback_data = f"add{count}")
-        button2 = InlineKeyboardButton(text="del",callback_data = f"del{count}")
-        return keyboard.add(button1, button2)
+        button2 = InlineKeyboardButton(text="ban",callback_data = f"ban{count}")
+        button3 = InlineKeyboardButton(text="del",callback_data = f"del{count}")
+        return keyboard.add(button1, button2, button3)
