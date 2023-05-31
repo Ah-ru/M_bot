@@ -7,7 +7,8 @@ with closing(sqlite3.connect(database)) as con:
     with closing(con.cursor()) as tab:
         try:
             tab.execute("CREATE TABLE admin (id INTEGER, password TEXT)")
-            tab.execute("CREATE TABLE bot_params(real_password TEXT, about TEXT, root TEXT)")
+            tab.execute("CREATE TABLE bot_params (real_password TEXT, about TEXT, root TEXT)")
+            tab.execute("CREATE TABLE ban (id INTEGER)")
             tab.execute("CREATE TABLE user_message (id INTEGER, username TEXT, message TEXT, time INTEGER)")
             tab.execute("INSERT INTO bot_params VALUES (?,?,?)",('0000', '', ''))
             con.commit()
