@@ -41,6 +41,38 @@ class SQL_Enter:
                 local_time = datetime.datetime.fromtimestamp(int(date) , tz=tz).strftime('%d-%m-%Y\nTime: %H:%M:%S')
                 return us_id, username, local_time, text, range_tab, text
 
+    def check_ban(us_id):
+        with closing(sqlite3.connect(database)) as con:
+            with closing(con.cursor()) as tab:
+                try:
+                    ' '.join(map(str, tab.execute("SELECT id FROM ban WHERE id = ?",(us_id,)).fetchall().pop()))
+                    return True
+                except:
+                    return False
+
+    def ban_func(count):
+        with closing(sqlite3.connect(database)) as con:
+            with closing(con.cursor()) as tab:
+                us_id = int(' '.join(map(str, tab.execute("SELECT id FROM user_message").fetchall().pop(count))))
+                t = tab.execute("SELECT id FROM ban WHERE id = ?",(us_id,)).fetchall()
+                if not t:
+                    tab.execute("INSERT INTO ban VALUES (?)",(us_id,))
+                    con.commit()
+                    return True
+                else:
+                    tab.execute("DELETE FROM ban WHERE id = ?", (us_id,))
+                    con.commit()
+                    return False
+
+    def check_on_0():
+        with closing(sqlite3.connect(database)) as con:
+            with closing(con.cursor()) as tab:
+                range_tab = int(' '.join(map(str, tab.execute("SELECT COUNT(*) FROM user_message").fetchall().pop(0))))
+                if range_tab == 0:
+                    return True    
+                else:
+                    return False
+
     def post(id, username, text, date):
         with closing(sqlite3.connect(database)) as con:
             with closing(con.cursor()) as tab:

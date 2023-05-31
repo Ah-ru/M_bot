@@ -12,5 +12,7 @@ First: defalt admin password = 0000(Then you can enter new admin password)
 Second: Necessary files.
 Necessary files: main.py, config.py, sqlite.py, Keyboards.py(You can find this files in the github repository)
 *Database can create itself.
+*Updated admin panel: Now ypu can send message to group, read messages by the piece and delelte messages by the piece.
+*Added 'ban - system'. You can block a user from the admin panel.
 All, if will questions write me on email.
 GoodBye.
