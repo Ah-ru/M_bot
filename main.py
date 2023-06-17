@@ -85,7 +85,7 @@ def passwd_new(message : Message):
 @bot.message_handler(commands=["Yes"])#OK
 def pass_yes(message: Message):
     if SQL_Enter.exam_admin(message.chat.id):
-        bot.send_message(message.chat.id, text = f"Password was update, password = {sd['pass']}Click '/go_main' to go to main menu", reply_markup = Keyboard.after_passwd_keyboard())
+        bot.send_message(message.chat.id, text = f"Password was update\nPassword = {sd['pass']}\nClick '/back' to go to settings\nClick '/go_main' to go to main menu", reply_markup = Keyboard.after_passwd_keyboard())
         SQL_Enter.pass_yes(sd["pass"])
     else:
         bot.send_message(message.chat.id, "sorry, you are not the admin.", reply_markup = Keyboard.main_menu())
@@ -145,7 +145,7 @@ def back_call(call: CallbackQuery):
         sd["del_2"] = dk1
 
 
-@bot.callback_query_handler(func=lambda call: call.data.startswith("add"))#!!!!!
+@bot.callback_query_handler(func=lambda call: call.data.startswith("add"))
 def send_gr(call: CallbackQuery):
     sd["adc"] = int(call.data[3:])
     bot.answer_callback_query(call.id, text = "Please write your answer to this message.")
@@ -183,7 +183,7 @@ def del_call(call: CallbackQuery):
         bot.delete_message(chat_id = call.message.chat.id, message_id= sd["del_2"].message_id)
         bot.send_message(call.message.chat.id, text = "Message ran out", reply_markup=Keyboard.after_passwd_keyboard())
     elif SQL_Enter.range_tab() == count:
-        back_call(call=call)
+        back_call(call)
     else:
         out = SQL_Enter.read_messages(count)
         sd["count"] = count
@@ -203,22 +203,5 @@ def del_call(call: CallbackQuery):
             bot.answer_callback_query(call.id, text = f"This user was BANNED")
         else:
             bot.answer_callback_query(call.id, text = f"This user was UNBANNED")
-
-
-@bot.message_handler(commands=["delete_all_messages"])
-def delete_all(message: Message):
-    if SQL_Enter.exam_admin(message.chat.id):
-        bot.send_message(message.chat.id, "Danger! All messages will delete!", reply_markup = Keyboard.confirm())
-    else:
-        bot.send_message(message.chat.id, "sorry, you are not the admin.", reply_markup = Keyboard.main_menu())
-
-
-@bot.message_handler(commands=["confirm_deletion_all_messages"])
-def confirm_delete_all(message: Message):
-    if SQL_Enter.exam_admin(message.chat.id):
-        SQL_Enter.confirm_delete_all()
-        bot.send_message(message.chat.id, "all messages was deleted.", reply_markup = Keyboard.admin_keyboard())
-    else:
-        bot.send_message(message.chat.id, "sorry, you are not the admin.", reply_markup = Keyboard.main_menu())
 
 bot.infinity_polling() 

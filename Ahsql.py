@@ -113,12 +113,6 @@ class SQL_Enter:# Работа с базой дынных / Worked with database
                 tab.execute(f"UPDATE bot_params SET real_password = ('{new_passwd}')")
                 con.commit()
 
-    def confirm_delete_all():# Удаление всех сообщений / Removes all messages from the database
-        with closing(sqlite3.connect(database)) as con:
-            with closing(con.cursor()) as tab:
-                tab.execute("DELETE FROM user_message")
-                con.commit()
-
     def send_to_chanel(count):# Отправка сообщений в канал(Telegram) / Sends message in the Telegram channel
         with closing(sqlite3.connect(database)) as con:
             with closing(con.cursor()) as tab:        

@@ -16,16 +16,7 @@ class Keyboard:
     def admin_keyboard():
         keyboard = ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
         button1 = KeyboardButton("/read_messages")
-        button2 = KeyboardButton("/delete_all_messages")
-        button3 = KeyboardButton("/settings")
-        button4 = KeyboardButton("/go_main")
-        return keyboard.add(button1, button2, button3, button4)
-
-    @staticmethod  
-    def confirm():
-        keyboard = ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
-        button1 = KeyboardButton("/confirm_deletion_all_messages")
-        button2 = KeyboardButton("/all_commands")
+        button2 = KeyboardButton("/settings")
         button3 = KeyboardButton("/go_main")
         return keyboard.add(button1, button2, button3)
     
@@ -40,7 +31,7 @@ class Keyboard:
     def new_pass_settings_keyboard():
         keyboard = InlineKeyboardMarkup(row_width = 1)
         button1 = InlineKeyboardButton(text="Set new password",callback_data = "passwd")
-        button2 = InlineKeyboardButton(text="Checked",callback_data = "apass")
+        button2 = InlineKeyboardButton(text="See password",callback_data = "apass")
         return keyboard.add(button1, button2)
     
     @staticmethod
