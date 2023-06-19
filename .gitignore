@@ -1,0 +1,4 @@
+__pycache__
+.env
+telegram.db
+readme.txt
