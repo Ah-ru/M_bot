@@ -31,9 +31,9 @@
 
   4. Создайте .env файл по шаблону
     
-  TGAPI = "Your Telegram_api_token" Ваш Api token telegram bot/ апи токен телеграм бота\
-  GID = "Group_ID_(integer)"        Ваш id группы / id - ай-ди\
-  NDB = "your_path_to_database"     Ваш путь к базе данных\
+  TGAPI = "Your Telegram_api_token" Ваш Api token telegram bot/ апи токен телеграм бота.
+  GID = "Group_ID_(integer)"        Ваш id группы / id - ай-ди.
+  NDB = "your_path_to_database"     Ваш путь к базе данных.
 
 
   **Подсказка:** Для получения пути до рабочей директорию Linux:
