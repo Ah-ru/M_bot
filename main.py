@@ -6,7 +6,7 @@ import sqlite3
 class Admin_params:
     default_pass = 1111
     about = None
-    token = "6032634459:AAHeCf7XQKi-8OJC4eEZfZSVCdb4RFVZ5lw"
+    token = "your_token"
     database = "telegram_database.db"
 
 bot = TeleBot(Admin_params.token)
