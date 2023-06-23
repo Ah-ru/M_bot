@@ -1,10 +1,74 @@
 # M_bot
 
-## Описание 
+**Подсказка:** Документация на русском ниже 
+
+## English
+
+### Description:
+This bot can: save, read, send to a group/channel and delete messages, as well as ban users
+
+### Instructions for deployment
+1. Clone branch master.bot  from the M_bot repository:
+
+  ```
+    git clone https://github.com/Ah-ru/M_bot --branch master.bot
+  ```
+
+  2. Go to M_bot directory:
+
+  ```
+    cd M_bot
+  ```
+
+  3. Install libraries:
+
+  ```
+    pip install -r requirements.txt
+  ```
+
+  If was error, try:
+
+  ```
+    pip3 install -r requirements.txt
+  ```
+
+  4. Create an .env file according to the sample:
+    
+  TGAPI = "Your Telegram_api_token" 
+  GID = "Group_ID_(integer)"       
+  NDB = "your_path_to_database"    
+
+
+  **Hint:** To get the path to the working directory in linux:
+
+  ```
+    pwd
+  ```
+  You geted path to the working directory M_bot\
+  Example : /home/test/M_bot\
+  Create a name for your database (.db)  *For example: database.db\
+  Example : /home/test/M_bot/database.db - This path to database
+
+  5. Now, start 'main.py':
+
+  ```
+    python main.py
+  ```
+
+  If was error, try:
+
+  ```
+    python3 main.py
+  ```
+  *For stop CTRL+C*
+
+## Русский
+
+### Описание 
 Бот позволяет записывать, читать, отправлять в группу/канал, и удалять сообщения полученные от пользователей, а так - же банить пользователей
 
 
-## Инструкция по развертыванию
+### Инструкция по развертыванию
   1. Клонируйте ветку master.bot из репозитория M_bot:
 
   ```
