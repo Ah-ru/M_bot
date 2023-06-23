@@ -34,7 +34,7 @@ This bot can: save, read, send to a group/channel and delete messages, as well a
 
   4. Create an .env file according to the sample:
     
-  TGAPI = "Your Telegram_api_token" 
+  TGAPI = "Your Telegram_api_token"\ 
   GID = "Group_ID_(integer)"       
   NDB = "your_path_to_database"    
 
