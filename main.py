@@ -85,7 +85,7 @@ def passwd_new(message : Message):
 @bot.message_handler(commands=["Yes"])#OK
 def pass_yes(message: Message):
     if SQL_Enter.exam_admin(message.chat.id):
-        bot.send_message(message.chat.id, text = f"Password was update\nPassword = {sd['pass']}\nClick '/back' to go to settings\nClick '/go_main' to go to main menu", reply_markup = Keyboard.after_passwd_keyboard())
+        bot.send_message(message.chat.id, text = f"Password was update\nPassword = {sd['pass']}\nnClick '/go_main' to go to main menu", reply_markup = Keyboard.main_menu())
         SQL_Enter.pass_yes(sd["pass"])
     else:
         bot.send_message(message.chat.id, "sorry, you are not the admin.", reply_markup = Keyboard.main_menu())
@@ -98,6 +98,22 @@ def pass_no(message: Message):
     else:
         bot.send_message(message.chat.id, "sorry, you are not the admin.", reply_markup = Keyboard.main_menu())
 
+#tested function - unbanned function
+@bot.message_handler(commands=["test"])
+def read_messages(message: Message):
+    if SQL_Enter.exam_admin(message.from_user.id):
+        count = 0
+        while True:
+            try:
+                out = SQL_Enter.r_b(count)
+                bot.send_message(chat_id = message.chat.id, text = f"{out[0]} {out[1]}")
+                count +=1
+            except:
+                if count == 0:
+                    bot.send_message(message.from_user.id, "No messages.")
+                break         
+    else:
+        bot.send_message(message.from_user.id, "sorry, you are not the admin.", reply_markup = Keyboard.main_menu())
 
 @bot.message_handler(commands=["read_messages"])
 def read_messages(message: Message):

@@ -8,28 +8,28 @@ import datetime
 from contextlib import closing
 from config import database
 
-with closing(sqlite3.connect(database)) as con:#Создание базы данных со всеми таблицами / Create database with all tables
+with closing(sqlite3.connect(database)) as con:
     with closing(con.cursor()) as tab:
         try:
             tab.execute("CREATE TABLE admin (id INTEGER, password TEXT)")
             tab.execute("CREATE TABLE bot_params (real_password TEXT, about TEXT, root TEXT)")
-            tab.execute("CREATE TABLE ban (id INTEGER)")
+            tab.execute("CREATE TABLE ban (id INTEGER, username TEXT)")
             tab.execute("CREATE TABLE user_message (id INTEGER, username TEXT, message TEXT, time INTEGER)")
             tab.execute("INSERT INTO bot_params VALUES (?,?,?)",('0000', '', ''))
             con.commit()
-        except sqlite3.OperationalError:#Проверка, создана ли , создана ли база данных / Checking, database was created or not?
+        except sqlite3.OperationalError:
             pass
 
-class SQL_Enter:# Работа с базой дынных / Worked with database
-    def exam_admin(admin_id):# Проверка, является ли администратором / Checking on admin, true or false 
+class SQL_Enter:
+    def exam_admin(admin_id):#Checking on admin, true or false 
         with closing(sqlite3.connect(database)) as con:
             with closing(con.cursor()) as tab:
-                passwd = ' '.join(map(str, tab.execute("SELECT real_password FROM bot_params").fetchall().pop()))#Получаем актуальный пароль / get real password
+                passwd = ' '.join(map(str, tab.execute("SELECT real_password FROM bot_params").fetchall().pop()))# get real password
                 try:     
-                    admin_passwd = ' '.join(map(str, tab.execute("SELECT password FROM admin WHERE id = (?) ", (admin_id,)).fetchall().pop()))#Пробуем получить пароль для конкретного пользователя / try: get password for concrete user
-                except IndexError:#Значит пользователя нет в базе / user not in database
-                    admin_passwd = ' '# устанавливаем строку / set string 
-                if passwd == admin_passwd:#Проверяем, соответствует ли 'админ пароль' актуальному / Checkig, admin password is real password
+                    admin_passwd = ' '.join(map(str, tab.execute("SELECT password FROM admin WHERE id = (?) ", (admin_id,)).fetchall().pop()))
+                except IndexError:
+                    admin_passwd = ' '
+                if passwd == admin_passwd:
                     return True
                 else:
                     return False
@@ -61,16 +61,24 @@ class SQL_Enter:# Работа с базой дынных / Worked with database
                 except IndexError:
                     return False
 
+    def r_b(count):
+        with closing(sqlite3.connect(database)) as con:
+            with closing(con.cursor()) as tab:
+                us_id = ' '.join(map(str, tab.execute("SELECT id FROM ban").fetchall().pop(count)))
+                username = ' '.join(map(str, tab.execute("SELECT username FROM ban").fetchall().pop(count)))
+                return us_id, username
+
     def ban_func(count):# Занесение в бан / Insert into ban
         with closing(sqlite3.connect(database)) as con:
             with closing(con.cursor()) as tab:
                 us_id = int(' '.join(map(str, tab.execute("SELECT id FROM user_message").fetchall().pop(count))))
+                username = ' '.join(map(str, tab.execute("SELECT username FROM user_message").fetchall().pop(count)))
                 t = tab.execute("SELECT id FROM ban WHERE id = ?",(us_id,)).fetchall()# Пытаемся достать id по id, если успешно, то в списке что-то будет, иначе он буде пуст
-                if not t:# Если список пуст:
-                    tab.execute("INSERT INTO ban VALUES (?)",(us_id,))
+                if not t:
+                    tab.execute("INSERT INTO ban VALUES (?,?)",(us_id, username,))
                     con.commit()
                     return True
-                else:# Если в списке что-то есть 
+                else:
                     tab.execute("DELETE FROM ban WHERE id = ?", (us_id,))
                     con.commit()
                     return False
