@@ -44,7 +44,7 @@ This bot can: save, read, send to a group/channel and delete messages, as well a
   ```
     pwd
   ```
-  You geted path to the working directory M_bot\
+  You get it path to the working directory M_bot\
   Example : /home/test/M_bot\
   Create a name for your database (.db)  *For example: database.db\
   Example : /home/test/M_bot/database.db - This path to database
